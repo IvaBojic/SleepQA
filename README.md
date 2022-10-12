@@ -35,7 +35,7 @@ To calculate inter-annotator agreement, we treat the answers that are provided b
 
 ## Average number of words
 
-We compared the general characteristics of our dataset (e.g. average number of words in passages, questions and answers) with six datasets [^3] containing extractive and short abstractive answers.
+We compared the general characteristics of our dataset (e.g., average number of words in passages, questions and answers) with six datasets [^3] containing extractive and short abstractive answers.
 
 | Dataset      | Avg.             | \# of | words |     |Word| frequency | of    |1st    | question|(%) || 
 | :----------: | :--------------: | :---: | :---: |:--: |:--:|:--:| :--: | :---: | :---: | :---: | :---: |
@@ -50,7 +50,34 @@ We compared the general characteristics of our dataset (e.g. average number of w
 
 Average number of words per passages and questions in SleepQA dataset are compared to the one in SQuAD (2.0) dataset. However, the average number of words in answers is three times as much.
 
+## Question and answer entailment
+
+Question A entails question B if every answer to B is also exactly or partially correct answer to A. Similarly, answer A and answer B can be considered to be entailed if both are able to answer the same question. Since in our label collection process, we used different passages for formulating each question, it was expected that both question and answer entailment would be rather low due to different choices of words and the unlikeliness of identical phrasing appearing in different passages. However, there is a greater-than-expected occurrence of identical answers. This can be attributed to two factors: the large proportion of questions that call for numerical answers such as 7, as well as the fact that answers are text spans as opposed to full sentences, leading to less variation.
+
+| Entailment type | Occurrence |
+| :-------------: | :--------: |
+| Question        |     222    |
+| Answer          |     149    |
+
+## Question answer similarities
+
+In order to compare similarities between a given question and a given answer in a pair in our dataset against the other similar datasets, we downloaded five datasets using download script provided by authors. From each training set, we then randomly selected 1,000 question-answer pairs and for each question we detected the full sentence where the answer came from. In that sense, for each dataset separately we built a subset of labels where answers were full sentences, rather than text spans. Finally, for each pair in a particular dataset, we calculated F1 score separately and then averaged them over all 1,000 pairs. 
+
+| Dataset name | F1 score |
+| :----------: | :------: |
+| **SleepQA**  | **0.17** |
+|  SQUAD 1.1   |   0.09   |
+| TriviaQA     |   0.07   |
+|  CuratedTrec | 0.05     |
+|  NQ          | 0.04     |
+| WebQuestions | 0.02     |
+
+Detected similarities between a question and an answer in a question-answer pair in our dataset were higher than those from other datasets. This could potentially be a result of labeling process during which annotators were encouraged to first find a potential answer from the passage and then formulate a question based on the chosen answer. This resulted in using similar phrases in the posed questions from the corresponding passages. Although, we do note that perhaps some of the overlap could be reduced by giving reminders to rephrase questions, this problem cannot be completely solved using just annotators’ efforts. In future work, we will investigate whether using back translation for data augmentation could solve this problem. The main idea behind using back translation for data augmentation is that the training examples are machine-translated from a source to a pivot language and back, thus obtaining paraphrases. 
+
+
+
 [^1]: [Sleep foundation webpage](https://www.sleepfoundation.org)
 [^2]: [The sleep doctor webpage](https://thesleepdoctor.com)
 [^3]: [ELI5: Long form question answering](https://arxiv.org/abs/1907.09190)
 [^4]: [Inter-coder agreement for computational linguistics](https://direct.mit.edu/coli/article/34/4/555/1999/Inter-Coder-Agreement-for-Computational)
+[^5]: [Five different datasets](https://github.com/facebookresearch/DPR/blob/main/dpr/data/download_data.py)
