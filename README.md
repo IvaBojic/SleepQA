@@ -68,16 +68,63 @@ In order to compare similarities between a given question and a given answer in 
 | **SleepQA**  | **0.17** |
 |  SQUAD 1.1   |   0.09   |
 | TriviaQA     |   0.07   |
-|  CuratedTrec | 0.05     |
-|  NQ          | 0.04     |
-| WebQuestions | 0.02     |
+|  CuratedTrec |   0.05   |
+|  NQ          |   0.04   |
+| WebQuestions |   0.02   |
 
 Detected similarities between a question and an answer in a question-answer pair in our dataset were higher than those from other datasets. This could potentially be a result of labeling process during which annotators were encouraged to first find a potential answer from the passage and then formulate a question based on the chosen answer. This resulted in using similar phrases in the posed questions from the corresponding passages. Although, we do note that perhaps some of the overlap could be reduced by giving reminders to rephrase questions, this problem cannot be completely solved using just annotators’ efforts. In future work, we will investigate whether using back translation for data augmentation could solve this problem. The main idea behind using back translation for data augmentation is that the training examples are machine-translated from a source to a pivot language and back, thus obtaining paraphrases. 
 
+# Model fine-tuning
 
+We evaluated the quality of our dataset and performed retrieval/reader models fine-tuning on BERT model and five domain-specific BERTs: 
+1. BioBERT, 
+2. BioBERT BioASQ, 
+3. ClinicalBERT, 
+4. SciBERT and 
+5. PubMedBERT. 
+
+We fine-tuned our models for 30 epochs, with a batch size equal to 16. We only set other negatives parameter to one (i.e., hard negatives parameter is equal to zero), which we randomly chose from the text corpus. 
+
+# Evaluation
+
+We performed both *intrinsic* and *extrinsic* evaluation of fine-tuned models and the whole QA pipeline. Intrinsic evaluation evaluates properties of each models' output, while extrinsic evaluation evaluates the impact of the whole QA pipeline, by investigating to which degree it achieves the overarching task for which it was developed. Our QA system was designed to provide health coaches with direct and accurate answers upon receiving sleep-related queries from clients.
+
+## Intrinsic evaluation
+
+Intrinsic evaluation was done using automatic metrics on 500 test labels: *recall@k* for retrieval models and *EM* and *F1* scores for reader models and QA pipelines. We evaluated our five fine-tuned domain-specific BERT retrieval models against Lucene BM25 model, while our fine-tuned domain-specific BERT reader models were compared against BERT SQuAD2. Finally, we compared the built QA pipeline (the best performing combination of fine-tuned retrieval and reader models) against Lucene BM25 + BERT SQuAD2 QA pipeline.
+
+### Retriever models 
+
+Recall@1 on 500 corpus-specific questions from our test set using six retrieval models showed that Lucene BM25, a traditional sparse vector space model, outperformed both domain-specific BERT models fine-tuned on SleepQA dataset. This shows that there exists a significant margin of improvement for domain-specific dense retrieval models.
+
+### Reader models
+
+The fine-tuned domain-specific BERT reader models were compared to BERT SQuAD2 model. Reader models are evaluated independently from the retrieval models, meaning that the question and its exact passage ("oracle") are provided for each reader as its inputs. This allows us to find the best performing fine-tuned retrieval and reader models separately.
+
+
+| **Name of the model** | **recall@1** | **EM (oracle)** | **F1 (oracle)** |
+| :--- | ---: | ---: | ---: |
+| Lucene BM25 (retrieval) | **0.61** |  |  |
+| *BERT SQuAD2* (reader) |  | **0.50** | 0.64 |
+| *Fine-tuned BERT* (retrieval/reader) | 0.35 | 0.56 | 0.68 |
+| *Fine-tuned BioBERT* (retrieval/reader) | 0.35 | 0.58 | 0.70 |
+| *Fine-tuned BioBERT BioASQ* (reader) |  | **0.61** | 0.73 |
+| *Fine-tuned ClinicalBERT* (retrieval/reader) | 0.34 | 0.56 | 0.68 |
+| *Fine-tuned SciBERT* (retrieval/reader) | 0.38 | 0.60 | 0.71 |
+| *Fine-tuned PubMedBERT* (retrieval/reader)[^6] | **0.43** | 0.59 | 0.71 |
+
+### QA pipeline
+
+To further perform evaluation of the best performing QA pipeline, we took the best fine-tuned retrieval model and the best fine-tuned reader model and compared them with Lucene BM25 + BERT SQuAD2 QA pipeline. Automatic evaluation of two QA pipelines: PubMedBERT + BioBERT BioASQ (denoted as Pipeline 1) and Lucene BM25 + BERT SQuAD2 (denoted as Pipeline 2) was done on 500 test labels. Pipeline 2 (with Lucene BM25 as a retrieval model) still performed better. 
+
+| Pipeline name |   EM   |   F1   |
+| :-----------: | :----: | :----: |
+| Pipeline 1    |  0.24  |  0.33  |
+| Pipeline 2    |  0.30  |  0.41  |
 
 [^1]: [Sleep foundation webpage](https://www.sleepfoundation.org)
 [^2]: [The sleep doctor webpage](https://thesleepdoctor.com)
 [^3]: [ELI5: Long form question answering](https://arxiv.org/abs/1907.09190)
 [^4]: [Inter-coder agreement for computational linguistics](https://direct.mit.edu/coli/article/34/4/555/1999/Inter-Coder-Agreement-for-Computational)
 [^5]: [Five different datasets](https://github.com/facebookresearch/DPR/blob/main/dpr/data/download_data.py)
+[^6]: PubMedBERT was initially trained on 30 epochs, but since the best epoch was 29 (i.e., the last one), we continued training to 50 epochs. The best validation point was then 37. The results in table for PubMedBERT are for 37th epoch.
