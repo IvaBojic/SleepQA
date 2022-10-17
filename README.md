@@ -74,7 +74,10 @@ In order to compare similarities between a given question and a given answer in 
 
 Detected similarities between a question and an answer in a question-answer pair in our dataset were higher than those from other datasets. This could potentially be a result of labeling process during which annotators were encouraged to first find a potential answer from the passage and then formulate a question based on the chosen answer. This resulted in using similar phrases in the posed questions from the corresponding passages. Although, we do note that perhaps some of the overlap could be reduced by giving reminders to rephrase questions, this problem cannot be completely solved using just annotators’ efforts. In future work, we will investigate whether using back translation for data augmentation could solve this problem. The main idea behind using back translation for data augmentation is that the training examples are machine-translated from a source to a pivot language and back, thus obtaining paraphrases. 
 
+
 # Model fine-tuning
+
+## Domain-specific BERTs
 
 We evaluated the quality of our dataset and performed retrieval/reader models fine-tuning on BERT model and five domain-specific BERTs: 
 1. BioBERT, 
@@ -84,6 +87,28 @@ We evaluated the quality of our dataset and performed retrieval/reader models fi
 5. PubMedBERT. 
 
 We fine-tuned our models for 30 epochs, with a batch size equal to 16. We only set other negatives parameter to one (i.e., hard negatives parameter is equal to zero), which we randomly chose from the text corpus. 
+
+Fine-tuning was done using framework provided by Facebook[^6]. In order to fine-tune a retrieval model, one needs to only change the name of *encoder* parameter from *biencoder_train_cfg.yaml* file:
+
+> defaults:
+>  - encoder: hf_PubMedBERT
+>  - train: biencoder_default
+>  - datasets: encoder_train_default
+
+Similarly, in order to fine-tune reader model, one needs to change *extractive_reader_train_cfg.yaml* file:
+
+> defaults:
+>  - encoder: hf_BioASQ
+>  - train: extractive_reader_default
+
+Configurations for all available models that can be fine-tuned are stored in *encoder* folder. In order to create new configuration, one needs to change *pretrained_model_cfg* parameter from *hf_\*.yaml* configuration:
+
+> pretrained_model_cfg: bert-base-uncased
+
+## Baseline models
+
+We evaluated our five fine-tuned domain-specific BERT retrieval models against Lucene BM25 model (using Pyserini toolkit[^7]), while our fine-tuned domain-specific BERT reader models were compared against BERT SQuAD2 (using Hugging Face[^8]).
+
 
 # Evaluation
 
@@ -111,7 +136,7 @@ The fine-tuned domain-specific BERT reader models were compared to BERT SQuAD2 m
 | *Fine-tuned BioBERT BioASQ* (reader) |  | **0.61** | 0.73 |
 | *Fine-tuned ClinicalBERT* (retrieval/reader) | 0.34 | 0.56 | 0.68 |
 | *Fine-tuned SciBERT* (retrieval/reader) | 0.38 | 0.60 | 0.71 |
-| *Fine-tuned PubMedBERT* (retrieval/reader)[^6] | **0.43** | 0.59 | 0.71 |
+| *Fine-tuned PubMedBERT* (retrieval/reader)[^10] | **0.43** | 0.59 | 0.71 |
 
 ### QA pipeline
 
@@ -127,4 +152,8 @@ To further perform evaluation of the best performing QA pipeline, we took the be
 [^3]: [ELI5: Long form question answering](https://arxiv.org/abs/1907.09190)
 [^4]: [Inter-coder agreement for computational linguistics](https://direct.mit.edu/coli/article/34/4/555/1999/Inter-Coder-Agreement-for-Computational)
 [^5]: [Five different datasets](https://github.com/facebookresearch/DPR/blob/main/dpr/data/download_data.py)
-[^6]: PubMedBERT was initially trained on 30 epochs, but since the best epoch was 29 (i.e., the last one), we continued training to 50 epochs. The best validation point was then 37. The results in table for PubMedBERT are for 37th epoch.
+[^6]: [DPR framework](https://github.com/facebookresearch/DPR)
+[^7]: [Pyserini toolkit](https://github.com/facebookresearch/DPR)
+[^8]: [BERT SQuAD2 model](https://huggingface.co/deepset/bert-base-uncased-squad2)
+
+[^10]: PubMedBERT was initially trained on 30 epochs, but since the best epoch was 29 (i.e., the last one), we continued training to 50 epochs. The best validation point was then 37. The results in table for PubMedBERT are for 37th epoch.
