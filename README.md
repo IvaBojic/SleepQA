@@ -136,7 +136,7 @@ The fine-tuned domain-specific BERT reader models were compared to BERT SQuAD2 m
 | *Fine-tuned BioBERT BioASQ* (reader) |  | **0.61** | 0.73 |
 | *Fine-tuned ClinicalBERT* (retrieval/reader) | 0.34 | 0.56 | 0.68 |
 | *Fine-tuned SciBERT* (retrieval/reader) | 0.38 | 0.60 | 0.71 |
-| *Fine-tuned PubMedBERT* (retrieval/reader)[^10] | **0.43** | 0.59 | 0.71 |
+| *Fine-tuned PubMedBERT* (retrieval/reader) | **0.43** | 0.59 | 0.71 |
 
 ### QA pipeline
 
@@ -147,6 +147,21 @@ To further perform evaluation of the best performing QA pipeline, we took the be
 | Pipeline 1    |  0.24  |  0.33  |
 | Pipeline 2    |  0.30  |  0.41  |
 
+## Extrinsic evaluation
+
+Extrinsic evaluation was done by five annotators on 650 real-world questions. Each annotator evaluated the answers for 100 questions. The answers for additional 150 questions were evaluated by all five annotators to allow for inter-annotator agreement calculation. Through this process we collected 500 answers with single evaluation and 150 answers with 5-way evaluations. Outputs from each pipeline were presented in randomized order to avoid bias by hindering annotators from favouring our pipeline. 
+
+Annotators were asked to give a score “1” if the answer 1 was better, “2” if the answer 2 was better, “3” if both answers were equally good, and “4” if both answers were equally bad. In addition to comparing two pipelines based on the text span answers (denoted as “w/o exp”), we also asked annotators to repeat the same evaluation, but this time to give scores not only based on the text spans, but also on their corresponding passages (denoted as “w exp”). By showing the retrieved passages in addition to the text spans, annotators were presented with an explanation which passages the text spans were retrieved from.
+
+|                  |   w/o exp  |   w exp  |
+| :-----------:    | :----:     | :----:   |
+| Pipeline 1 wins  | 33.5%      |   31.7%  |
+| Pipeline 2 wins  | 13.5%      |   13.4%  |
+| Equally good     | 12.9%      |   12.2%  |
+| Equally bad      | 40.0%      |   42.8%  |
+
+Results indicate that our pipeline performs better than Pipeline 2 on the task which it was designed for, i.e., on the task of providing health coaches with the correct answers on sleep-related queries from their clients. Moreover, chi-squared test showed that there was no statistically significant difference (p=0.78) between scores given to each pipeline when they look only at answers and when they are also provided by the explanations. However, in a small number of cases, after reading provided explanation, annotators change their score to “4”, which means that explanation helped them to realize that answer was not as good as it seemed on its own. This might come from the fact that answers are short and in a small number of cases it is hard to judge their quality only on their own.
+
 [^1]: [Sleep foundation webpage](https://www.sleepfoundation.org)
 [^2]: [The sleep doctor webpage](https://thesleepdoctor.com)
 [^3]: [ELI5: Long form question answering](https://arxiv.org/abs/1907.09190)
@@ -155,5 +170,3 @@ To further perform evaluation of the best performing QA pipeline, we took the be
 [^6]: [DPR framework](https://github.com/facebookresearch/DPR)
 [^7]: [Pyserini toolkit](https://github.com/facebookresearch/DPR)
 [^8]: [BERT SQuAD2 model](https://huggingface.co/deepset/bert-base-uncased-squad2)
-
-[^10]: PubMedBERT was initially trained on 30 epochs, but since the best epoch was 29 (i.e., the last one), we continued training to 50 epochs. The best validation point was then 37. The results in table for PubMedBERT are for 37th epoch.
