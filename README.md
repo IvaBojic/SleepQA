@@ -136,7 +136,7 @@ The fine-tuned domain-specific BERT reader models were compared to BERT SQuAD2 m
 | *Fine-tuned BioBERT BioASQ* (reader) |  | **0.61** | 0.73 |
 | *Fine-tuned ClinicalBERT* (retrieval/reader) | 0.34 | 0.56 | 0.68 |
 | *Fine-tuned SciBERT* (retrieval/reader) | 0.38 | 0.60 | 0.71 |
-| *Fine-tuned PubMedBERT* (retrieval/reader) | **0.43** | 0.59 | 0.71 |
+| *Fine-tuned PubMedBERT* (retrieval/reader) | **0.42** | 0.59 | 0.71 |
 
 ### QA pipeline
 
