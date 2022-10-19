@@ -156,7 +156,7 @@ def pipeline1(input_file):
                                                   sum(em_go)/len(em_go), sum(f1_go)/len(f1_go)))    
  
        
-def pipeline2(input_file, index_file, flag_open):
+def pipeline2(input_file, index_file, flag_open, output_file):
     
     q_a = read_file(input_file)
     
@@ -199,7 +199,7 @@ def pipeline2(input_file, index_file, flag_open):
     if (not flag_open):
         print("pipeline2 --> em: {:.2f}, f1: {:.2f}".format(sum(em_go)/len(em_go), sum(f1_go)/len(f1_go)))
     else:
-        with open("open_pipeline2.tsv", "w", encoding = "utf-8") as fout: 
+        with open(output_file, "w", encoding = "utf-8") as fout: 
             for q in q_a_p.keys():
                 fout.write("{}\t{}\t{}\n". format(q, q_a_p[q][0], q_a_p[q][1]))
 

@@ -1,5 +1,6 @@
 from indexes import prepare_json, create_indexes
 from auto_eval import *
+from human_eval import *
 
 
 if __name__ == "__main__":
@@ -12,17 +13,24 @@ if __name__ == "__main__":
     
     sleep_test = "../data/training/sleep-test.csv"
     oracle_json = "../data/oracle_json/sleep-test.json"
+    sleep_open = "../data/training/open_questions.csv"
     
     retrieval_folder = "../data/processed/retrieval/"
     reader_oracle_folder = "../data/processed/reader/oracle/"
 
-    pipeline1_file = "../data/processed/reader/pipeline1_label_1.250.json"
+    pipeline1_label = "../data/processed/pipeline1_label_1.250.json"
+    pipeline1_open_j = "../data/processed/pipeline1_open_1.250.json"
+    pipeline1_open_c = "../data/processed/pipeline1_open.csv" 
+    pipeline2_file = "../data/processed/pipeline2_open.csv"
+    compare_file = "../data/processed/p1_p2_compare.csv"
+    score_file = "../data/processed/p1_p2_compare_scored.csv"
+    human_eval = "../data/processed/p1_p2_final.csv"
   
     # create json
-    #prepare_json(text_corpus, json_folder)
+    prepare_json(text_corpus, json_folder)
     
     # create sparse indexes
-    #create_indexes(json_folder, index_folder)
+    create_indexes(json_folder, index_folder)
     
     # calculate recall@1 for different bert retrieval models
     berts_top1(retrieval_folder)
@@ -37,11 +45,20 @@ if __name__ == "__main__":
     oracle_squad2(oracle_json)
     
     # calculate EM/F1 for the best pipeline on test labels
-    pipeline1(pipeline1_file)
+    pipeline1(pipeline1_label)
     
     # run BM25 + bert-uncase-squad2 pipeline on test labels
-    pipeline2(sleep_test, index_folder, False)
+    pipeline2(sleep_test, index_folder, False, None)
     
+    # transcribe json to csv for pipeline 1
+    json_csv(pipeline1_open_j, pipeline1_open_c)    
+    
+    # run BM25 + bert-uncase-squad2 pipeline on open-ended questions
+    pipeline2(sleep_open, index_folder, True, pipeline2_file)    
+    
+    # randomizes answers from two pipelines and prepare for human evaluation
+    ##randomize_answers(pipeline1_open_c, pipeline2_file, compare_file)
+
 
     
     
