@@ -24,7 +24,7 @@ We randomly sample 150 labels from each annotator and assign them to four other 
 
 ## Real-world questions
 
-In addition to collecting labels, we also collect 1,000 real-world questions related to sleep in natural language. Annotators were neither presented with the text corpus nor given any specific instruction to form a certain type of questions, such as factoid questions. By collecting real-world questions, in addition to performing intrinsic evaluation of our system using test labels (i.e., using passage-question-answer triplets), we are also able to do extrinsic evaluation.
+In addition to collecting labels, we also collect 650 real-world questions related to sleep in natural language. Annotators were neither presented with the text corpus nor given any specific instruction to form a certain type of questions, such as factoid questions. By collecting real-world questions, in addition to performing intrinsic evaluation of our system using test labels (i.e., using passage-question-answer triplets), we are also able to do extrinsic evaluation.
 
 
 # Dataset analysis
