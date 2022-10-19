@@ -16,11 +16,13 @@ These folders contain files created by *indexes.py* script. Files from *bm25_ind
 
 This folder contains files needed to train different domain-specific BERT reader models.
 
-> python train_extractive_reader.py \
->	encoder.sequence_length=300 \
->	train_files="../../../../data/oracle_json/sleep-train.json" \
->	dev_files="../../../../data/oracle_json/sleep-dev.json"  \
->	output_dir="PubMedBERT_full/reader/"
+``` 
+python train_extractive_reader.py \
+encoder.sequence_length=300 \
+train_files="../../../../data/oracle_json/sleep-train.json" \
+dev_files="../../../../data/oracle_json/sleep-dev.json"  \
+output_dir="PubMedBERT_full/reader/"
+```
 
 # processed
 
@@ -30,7 +32,9 @@ This folder contains files and folders created using fine-tuned domain-specific 
 
 This folder contains files needed to train different domain-specific BERT retrieval models.
 
-> python train_dense_encoder.py \
-> train_datasets=[sleep_train] \
-> dev_datasets=[sleep_dev] \
-> output_dir="PubMedBERT_full/retrieval/"
+``` 
+python train_dense_encoder.py \
+train_datasets=[sleep_train] \
+dev_datasets=[sleep_dev] \
+output_dir="PubMedBERT_full/retrieval/"
+``` 
