@@ -90,20 +90,26 @@ We fine-tuned our models for 30 epochs, with a batch size equal to 16. We only s
 
 Fine-tuning was done using framework provided by Facebook[^6]. In order to fine-tune a retrieval model, one needs to only change the name of *encoder* parameter from *biencoder_train_cfg.yaml* file:
 
-> defaults:
->  - encoder: hf_PubMedBERT
->  - train: biencoder_default
->  - datasets: encoder_train_default
+``` 
+defaults:
+ - encoder: hf_PubMedBERT
+ - train: biencoder_default
+ - datasets: encoder_train_default
+``` 
 
 Similarly, in order to fine-tune reader model, one needs to change *extractive_reader_train_cfg.yaml* file:
 
-> defaults:
->  - encoder: hf_BioASQ
->  - train: extractive_reader_default
+``` 
+defaults:
+ - encoder: hf_BioASQ
+ - train: extractive_reader_default
+``` 
 
 Configurations for all available models that can be fine-tuned are stored in *encoder* folder. In order to create new configuration, one needs to change *pretrained_model_cfg* parameter from *hf_\*.yaml* configuration:
 
-> pretrained_model_cfg: bert-base-uncased
+``` 
+pretrained_model_cfg: bert-base-uncased 
+``` 
 
 ## Baseline models
 
