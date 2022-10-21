@@ -1,0 +1,3 @@
+models/pytorch/ctx_encoder/pytorch_model.bin filter=lfs diff=lfs merge=lfs -text
+models/pytorch/question_encoder/pytorch_model.bin filter=lfs diff=lfs merge=lfs -text
+models/pytorch/reader/pytorch_model.bin filter=lfs diff=lfs merge=lfs -text
