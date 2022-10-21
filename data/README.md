@@ -12,18 +12,6 @@ This folder contains two files:
 
 These folders contain files created by *indexes.py* script. Files from *bm25_indexes* folder are used in Lucerne BM25 retrieval model.
 
-## oracle_json
-
-This folder contains files needed to train different domain-specific BERT reader models.
-
-``` 
-python train_extractive_reader.py \
-encoder.sequence_length=300 \
-train_files="../../../../data/oracle_json/sleep-train.json" \
-dev_files="../../../../data/oracle_json/sleep-dev.json"  \
-output_dir="PubMedBERT_full/reader/"
-```
-
 ## processed
 
 This folder contains files and folders created using fine-tuned domain-specific BERT models.
@@ -38,3 +26,15 @@ train_datasets=[sleep_train] \
 dev_datasets=[sleep_dev] \
 output_dir="PubMedBERT_full/retrieval/"
 ``` 
+
+### oracle
+
+This folder contains files needed to train different domain-specific BERT reader models.
+
+``` 
+python train_extractive_reader.py \
+encoder.sequence_length=300 \
+train_files="../../../../data/training/oracle/sleep-train.json" \
+dev_files="../../../../data/training/oracle/sleep-dev.json"  \
+output_dir="PubMedBERT_full/reader/"
+```
