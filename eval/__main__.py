@@ -12,7 +12,7 @@ if __name__ == "__main__":
     index_folder = "/4TB/guest1/github/SleepQA/data/bm25_indexes/"
     
     sleep_test = "../data/training/sleep-test.csv"
-    oracle_json = "../data/oracle_json/sleep-test.json"
+    oracle_json = "../data/training/oracle/sleep-test.json"
     sleep_open = "../data/training/open_questions.csv"
     
     retrieval_folder = "../data/processed/retrieval/"
