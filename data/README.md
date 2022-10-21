@@ -34,7 +34,7 @@ This folder contains files needed to train different domain-specific BERT reader
 ``` 
 python train_extractive_reader.py \
 encoder.sequence_length=300 \
-train_files="../../../../data/oracle_json/sleep-train.json" \
-dev_files="../../../../data/oracle_json/sleep-dev.json"  \
+train_files="../../../../data/trautraininginin/oracle/sleep-train.json" \
+dev_files="../../../../data/training/oracle/sleep-dev.json"  \
 output_dir="PubMedBERT_full/reader/"
 ```
