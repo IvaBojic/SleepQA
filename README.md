@@ -3,7 +3,7 @@
 
 We release SleepQA, a dataset created from 7,005 passages comprising 4,250 training examples with single annotations and 750 examples with 5-way annotations. We fine-tuned different domain-specific BERT models on our dataset and perform extensive automatic and human evaluation of the resulting end-to-end QA pipeline. Comparisons of our pipeline with baseline show improvements in domain-specific natural language processing on real-world questions.
 
-This code is based on the following paper: Iva Bojic, Qi Chwen Ong, Megh Thakkar, Esha Kamran, Irving Yu Le Shua, Rei Ern Jaime Pang, Jessica Chen, Vaaruni Nayak, Shafiq Joty, Josip Car. **SleepQA: A Health Coaching Dataset on Sleep for Extractive Question Answering.**
+This code is based on the following paper: Iva Bojic, Qi Chwen Ong, Megh Thakkar, Esha Kamran, Irving Yu Le Shua, Rei Ern Jaime Pang, Jessica Chen, Vaaruni Nayak, Shafiq Joty, Josip Car. **SleepQA: A Health Coaching Dataset on Sleep for Extractive Question Answering.** Proceedings of Machine Learning for Health (ML4H) 2022 Workshop.
 
 # Dataset collection
 
