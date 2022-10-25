@@ -1,5 +1,7 @@
 import sys 
 sys.path.append("../utils")
+sys.path.append("../DPR-main/")
+
 from f1_score import calculate_f1
 
 import csv, pickle, torch, time
