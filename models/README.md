@@ -57,8 +57,8 @@ After running three above mentioned scripts, we need to download *tokenizer_conf
 
 *qa_system.py* script allows us to use fine-tuned models in a QA pipeline:
 1. *generate_dense_encodings* function generates encodings for text corpus,
-2. *dense_retriever* function retrieves the most relevant passage, and
-3. *extractive_reader* function retrieves the most relevant text span.
+2. *dense_retriever* function retrieves the most relevant passage for the given question, and
+3. *extractive_reader* function retrieves the most relevant text span for the given question.
 
 
 [^1]: [Convert DPR original checkpoint to pytorch](https://github.com/huggingface/transformers/blob/main/src/transformers/models/dpr/convert_dpr_original_checkpoint_to_pytorch.py)
