@@ -14,13 +14,13 @@ with:
 model = DPRContextEncoder(DPRConfig(**BertConfig.get_config_dict("microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext")[0]))
 `
 
-Similarly, we need to change code for DPRQuestionEncoder:
+Similarly, we need to change code for *DPRQuestionEncoder*:
 
 `
 model = DPRQuestionEncoder(DPRConfig(**BertConfig.get_config_dict("microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext")[0]))
 `
 
-and for DPRReader as:
+and for *DPRReader* as:
 
 `
 model = DPRReader(DPRConfig(**BertConfig.get_config_dict("gdario/biobert_bioasq")[0]))
