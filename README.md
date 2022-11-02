@@ -31,11 +31,11 @@ In addition to collecting labels, we also collect 650 real-world questions relat
 
 ## Inter-annotator agreement
 
-To calculate inter-annotator agreement, we treat the answers that are provided by the initial annotator as ground truth answers and keep the answers from four other annotators as human predictions. We take the maximum for both EM and F1 scores over all predictions (i.e., for four comparisons) and average them over all questions. The resulting score in this subset is **0.85** for the EM and **0.91** for F1 score. These numbers are above 0.8 ensuring reasonable quality of annotations[^4].
+To calculate inter-annotator agreement, we treat the answers that are provided by the initial annotator as ground truth answers and keep the answers from four other annotators as human predictions. We take the maximum for both EM and F1 scores over all predictions (i.e., for four comparisons) and average them over all questions. The resulting score in this subset is **0.85** for the EM and **0.91** for F1 score. These numbers are above 0.8 ensuring reasonable quality of annotations[^3].
 
 ## Average number of words
 
-We compared the general characteristics of our dataset (e.g., average number of words in passages, questions and answers) with six datasets [^3] containing extractive and short abstractive answers.
+We compared the general characteristics of our dataset (e.g., average number of words in passages, questions and answers) with six datasets [^4] containing extractive and short abstractive answers.
 
 | Dataset      | Avg.             | \# of | words |     |Word| frequency | of    |1st    | question|(%) || 
 | :----------: | :--------------: | :---: | :---: |:--: |:--:|:--:| :--: | :---: | :---: | :---: | :---: |
@@ -61,7 +61,7 @@ Question A entails question B if every answer to B is also exactly or partially 
 
 ## Question answer similarities
 
-In order to compare similarities between a given question and a given answer in a pair in our dataset against the other similar datasets, we downloaded five datasets using download script provided by authors. From each training set, we then randomly selected 1,000 question-answer pairs and for each question we detected the full sentence where the answer came from. In that sense, for each dataset separately we built a subset of labels where answers were full sentences, rather than text spans. Finally, for each pair in a particular dataset, we calculated F1 score separately and then averaged them over all 1,000 pairs. 
+In order to compare similarities between a given question and a given answer in a pair in our dataset against the other similar datasets, we downloaded five datasets using download script provided by authors[^5]. From each training set, we then randomly selected 1,000 question-answer pairs and for each question we detected the full sentence where the answer came from. In that sense, for each dataset separately we built a subset of labels where answers were full sentences, rather than text spans. Finally, for each pair in a particular dataset, we calculated F1 score separately and then averaged them over all 1,000 pairs. 
 
 | Dataset name | F1 score |
 | :----------: | :------: |
@@ -155,24 +155,26 @@ To further perform evaluation of the best performing QA pipeline, we took the be
 
 ## Extrinsic evaluation
 
-Extrinsic evaluation was done by five annotators on 650 real-world questions. Each annotator evaluated the answers for 100 questions. The answers for additional 150 questions were evaluated by all five annotators to allow for inter-annotator agreement calculation. Through this process we collected 500 answers with single evaluation and 150 answers with 5-way evaluations. Outputs from each pipeline were presented in randomized order to avoid bias by hindering annotators from favouring our pipeline. 
+Outputs from each pipeline were presented in randomized order to avoid bias by hindering annotators from favouring our pipeline. Annotators were asked to give a score “1” if the answer 1 was better, “2” if the answer 2 was better, “3” if both answers were equally good, and “4” if both answers were equally bad. In addition to comparing two pipelines based on the text span answers (denoted as “w/o exp”), we also asked annotators to repeat the same evaluation, but this time to give scores not only based on the text spans, but also on their corresponding passages (denoted as “w exp”). By showing the retrieved passages in addition to the text spans, annotators were presented with an explanation which passages the text spans were retrieved from.
 
-Annotators were asked to give a score “1” if the answer 1 was better, “2” if the answer 2 was better, “3” if both answers were equally good, and “4” if both answers were equally bad. In addition to comparing two pipelines based on the text span answers (denoted as “w/o exp”), we also asked annotators to repeat the same evaluation, but this time to give scores not only based on the text spans, but also on their corresponding passages (denoted as “w exp”). By showing the retrieved passages in addition to the text spans, annotators were presented with an explanation which passages the text spans were retrieved from.
+Extrinsic evaluation was done by five annotators on 500 real-world questions. Each annotator evaluated answers for 100 questions. The answers for additional 150 questions were evaluated by all five annotators to allow for inter-annotator agreement calculation using Gwet’s AC1 score[^9]. Through this process we collected 500 answers with single evaluation and 150 answers with 5-way evaluations. The calculated Gwet’s AC1 scores were \color{red}\textbf{0.76} and \textbf{0.79} \color{black} for span answers and span answers + explanations, respectively. Both scores imply a substantial agreement among annotators[^10]. 
 
 |                  |   w/o exp  |   w exp  |
 | :-----------:    | :----:     | :----:   |
-| Pipeline 1 wins  | 33.5%      |   31.7%  |
-| Pipeline 2 wins  | 13.5%      |   13.4%  |
-| Equally good     | 12.9%      |   12.2%  |
-| Equally bad      | 40.0%      |   42.8%  |
+| Pipeline 1 wins  | 35.0%      |   32.5%  |
+| Pipeline 2 wins  | 11.5%      |    9.0%  |
+| Equally good     | 13.0%      |   14.3%  |
+| Equally bad      | 40.5%      |   44.3%  |
 
 Results indicate that our pipeline performs better than Pipeline 2 on the task which it was designed for, i.e., on the task of providing health coaches with the correct answers on sleep-related queries from their clients. Moreover, chi-squared test showed that there was no statistically significant difference (p=0.78) between scores given to each pipeline when they look only at answers and when they are also provided by the explanations. However, in a small number of cases, after reading provided explanation, annotators change their score to “4”, which means that explanation helped them to realize that answer was not as good as it seemed on its own. This might come from the fact that answers are short and in a small number of cases it is hard to judge their quality only on their own.
 
 [^1]: [Sleep foundation webpage](https://www.sleepfoundation.org)
 [^2]: [The sleep doctor webpage](https://thesleepdoctor.com)
-[^3]: [ELI5: Long form question answering](https://arxiv.org/abs/1907.09190)
-[^4]: [Inter-coder agreement for computational linguistics](https://direct.mit.edu/coli/article/34/4/555/1999/Inter-Coder-Agreement-for-Computational)
+[^3]: [Inter-coder agreement for computational linguistics](https://direct.mit.edu/coli/article/34/4/555/1999/Inter-Coder-Agreement-for-Computational)
+[^4]: [ELI5: Long form question answering](https://arxiv.org/abs/1907.09190)
 [^5]: [Five different datasets](https://github.com/facebookresearch/DPR/blob/main/dpr/data/download_data.py)
 [^6]: [DPR framework](https://github.com/facebookresearch/DPR)
 [^7]: [Pyserini toolkit](https://github.com/facebookresearch/DPR)
 [^8]: [BERT SQuAD2 model](https://huggingface.co/deepset/bert-base-uncased-squad2)
+[^9]: [Gwet’s AC1 score](https://books.google.com.sg/books?hl=en&lr=&id=fac9BQAAQBAJ&oi=fnd&pg=PP1&ots=UWeudGHq78&sig=1cuuo8-Jo6eGnIw2rcXyhZymIJo&redir_esc=y#v=onepage&q&f=false)
+[^10]: [The measurement of observer agreement for categorical data](https://pubmed.ncbi.nlm.nih.gov/843571/)
