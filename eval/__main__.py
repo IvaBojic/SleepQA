@@ -25,6 +25,8 @@ if __name__ == "__main__":
     compare_file = "../data/processed/p1_p2_compare.csv"
     score_file = "../data/processed/p1_p2_compare_scored.csv"
     human_eval = "../data/processed/p1_p2_final.csv"
+    
+    consensus_file = "../data/agreement/model_agreement.csv"
   
     # create json
     prepare_json(text_corpus, json_folder)
@@ -58,7 +60,12 @@ if __name__ == "__main__":
     
     # randomizes answers from two pipelines and prepare for human evaluation
     ##randomize_answers(pipeline1_open_c, pipeline2_file, compare_file)
+    
+    #untangle answers from two pipelines
+    untangle_answers(score_file, human_eval)
 
+    # calculates Gwet_AC1 for consensus
+    calculate_gwet_AC1(consensus_file)
 
     
     

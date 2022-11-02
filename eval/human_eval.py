@@ -1,4 +1,5 @@
-import random, json
+import random, json, pprint
+import numpy as np
 import pandas as pd
 from collections import defaultdict
 from nltk.tokenize import word_tokenize
@@ -53,14 +54,13 @@ def randomize_answers(pipeline1, pipeline2, output_file):
     
 def untangle_answers(input_file, output_file):
     
-    dic_scores = defaultdict(int)
+    scores_span, scores_par = defaultdict(int), defaultdict(int)
 
     # q_p1,a_p1,a_p2,par_1,par_2,answer_1,answer_2,score_a,score_par
     filled_file = pd.read_csv(input_file, encoding = 'utf-8')
      
     fact_q = ["who", "what", "where", "when", "why", "how"] 
     
-    print(filled_file.shape) 
     for qn in filled_file.index:
         row = filled_file.iloc[qn]  
         
@@ -85,14 +85,72 @@ def untangle_answers(input_file, output_file):
         words = word_tokenize(row['q_p1'])
             
         if(words[0] not in fact_q):
-            dic_scores[filled_file.loc[qn, 'score_answer']] += 1
+            scores_span[filled_file.loc[qn, 'score_answer']] += 1
+            scores_par[filled_file.loc[qn, 'score_paragraph']] += 1
                 
-    print(filled_file['score_answer'].value_counts())   
-    print(filled_file['score_paragraph'].value_counts()) 
+    print("Human evaluation scores for span answers (all): \n{}".format(filled_file['score_answer'].value_counts()))
+    print("Human evaluation scores for span answers + explanations (all): \n{}".format(filled_file['score_paragraph'].value_counts())) 
     
-    print(dic_scores)
+    print("Human evaluation scores for span answers (not factual):")
+    print("\n".join("{}\t{}".format(k, v) for k, v in scores_span.items()))
+    
+    print("Human evaluation scores for span answers + explanations (not factual):")
+    print("\n".join("{}\t{}".format(k, v) for k, v in scores_par.items()))
 
     filled_file = filled_file[['q_p1', 'par_1', 'par_2', 'a_p1', 'a_p2', 'score_answer', 'score_paragraph']]
     
     filled_file.to_csv(output_file, index = False)
 
+
+def convert(int_number):
+    
+    bin_number = np.zeros(4, int)
+    
+    bin_number[int_number - 1] = 1
+    
+    return bin_number
+
+
+def get_ac1(preds_mat):
+    if preds_mat.shape[0] == 1:
+        return 0
+    pi_q = np.sum(preds_mat, axis = 1) / preds_mat.shape[1]
+    pey = (1 / (preds_mat.shape[0] - 1)) * np.sum(pi_q * (1 - pi_q))
+    pa = (np.sum(preds_mat, axis = 1) * (np.sum(preds_mat, axis = 1)-1)) / (preds_mat.shape[1] * (preds_mat.shape[1] - 1))
+    pa = np.sum(pa)
+    ac1 = (pa - pey) / (1 - pey)
+    ac1 *= 100
+    return ac1
+
+
+def calculate_gwet_AC1(input_file):
+    
+    agreement_file = pd.read_csv(input_file, encoding = 'utf-8')
+    
+    agreement_spans = agreement_file[['score_a_1', 'score_a_2', 'score_a_3', 'score_a_4']]
+    agreement_exp = agreement_file[['score_p_1', 'score_p_2', 'score_p_3', 'score_p_4']]
+    
+    results = []
+    for qn in agreement_spans.index:
+        row = agreement_spans.iloc[qn]  
+
+        preds_mat = np.stack(list(map(lambda n: convert(n), row)),  axis = -1)
+        
+        results.append(get_ac1(preds_mat))
+        
+    print("Gwet's AC1 score for span answers is: {:.2f}".format(sum(results)/len(results)))
+    
+    results = []
+    for qn in agreement_exp.index:
+        row = agreement_exp.iloc[qn]  
+
+        preds_mat = np.stack(list(map(lambda n: convert(n), row)),  axis = -1)
+        
+        results.append(get_ac1(preds_mat))
+        
+    print("Gwet's AC1 score for span answers + explanations is: {:.2f}".format(sum(results)/len(results)))
+            
+            
+      
+
+        
