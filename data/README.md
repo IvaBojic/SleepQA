@@ -2,11 +2,11 @@
 
 This folder contains two files:
 1. *labels_agreement.csv*
-2. *open_agreement.csv*
+2. *model_agreement.csv*
 
 *labels_agreement.csv* file contains 750 Q/A pairs with 5-ways annotations where the first column is paragraph id, the second is short span answer and the third one indicates whether this is an initial answer. This file is used in *inter_agreement.py* to calculate inter-annotator agreement for label collection process.
 
-*open_agreement.csv* file contains 150 5-ways scores where the first column is question, the second one is the answer from pipeline 1, the third one is the answer from pipeline 2, and the subsequent five columns are scores from five annotators. This file is used in *inter_agreement.py* for calculating inter-annotator agreement for extrinsic evaluation.
+*model_agreement.csv* file contains 150 5-ways scores where the first column is question, the second one is the answer from pipeline 1, the third one is the answer from pipeline 2, and the subsequent five columns are scores from five annotators. This file is used in *inter_agreement.py* for calculating inter-annotator agreement for extrinsic evaluation.
 
 ## bm25_indexes & bm25_json
 
