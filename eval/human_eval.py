@@ -127,8 +127,8 @@ def calculate_gwet_AC1(input_file):
     
     agreement_file = pd.read_csv(input_file, encoding = 'utf-8')
     
-    agreement_spans = agreement_file[['score_a_1', 'score_a_2', 'score_a_3', 'score_a_4']]
-    agreement_exp = agreement_file[['score_p_1', 'score_p_2', 'score_p_3', 'score_p_4']]
+    agreement_spans = agreement_file[['score_a_1', 'score_a_2', 'score_a_3', 'score_a_4', 'score_a_5']]
+    agreement_exp = agreement_file[['score_p_1', 'score_p_2', 'score_p_3', 'score_p_4', 'score_p_5']]
     
     results = []
     for qn in agreement_spans.index:
